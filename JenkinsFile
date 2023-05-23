@@ -1,0 +1,37 @@
+pipeline {
+    agent{
+        docker{
+            image 'maven:3-jdk-8'
+        }
+    }
+
+    stages {
+        stage('install playwright') {
+            steps {
+                // Perform build steps here
+                sh '''
+                npm i -D @playwright/test
+                npx playwright install
+                '''
+                
+            }
+        }
+
+        stage('help') {
+            steps {
+                // Perform testing steps here
+                sh 'npx playwright test --help'
+            }
+        }
+
+        stage('test') {
+            steps {
+                // Perform deployment steps here
+                sh '''
+                npx playwright test --list
+                npx playwright test
+                '''
+            }
+        }
+    }
+}
